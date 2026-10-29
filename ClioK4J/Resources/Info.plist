@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>CFBundleDevelopmentRegion</key>
+    <string>fr</string>
+    <key>CFBundleDisplayName</key>
+    <string>Clio K4J</string>
+    <key>CFBundleShortVersionString</key>
+    <string>1.0.0</string>
+    <key>CFBundleVersion</key>
+    <string>1</string>
+    <key>LSRequiresIPhoneOS</key>
+    <true/>
+    <key>UILaunchScreen</key>
+    <dict/>
+    <key>UIRequiredDeviceCapabilities</key>
+    <array>
+        <string>arm64</string>
+        <string>bluetooth-le</string>
+    </array>
+    <key>UISupportedInterfaceOrientations</key>
+    <array>
+        <string>UIInterfaceOrientationPortrait</string>
+    </array>
+    <key>UIBackgroundModes</key>
+    <array>
+        <string>audio</string>
+        <string>bluetooth-central</string>
+        <string>external-accessory</string>
+    </array>
+    <key>NSBluetoothAlwaysUsageDescription</key>
+    <string>Pour parler au boîtier OBD-II BLE de la voiture.</string>
+    <key>NSBluetoothPeripheralUsageDescription</key>
+    <string>Pour parler au boîtier OBD-II BLE de la voiture.</string>
+    <key>NSMicrophoneUsageDescription</key>
+    <string>Aucune utilisation du micro, requis par le moteur audio silencieux.</string>
+</dict>
+</plist>

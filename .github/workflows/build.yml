@@ -1,0 +1,61 @@
+name: Build unsigned IPA
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+  release:
+    types: [created]
+
+jobs:
+  build:
+    runs-on: macos-14
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install XcodeGen
+        run: brew install xcodegen
+
+      - name: Generate Xcode project
+        run: xcodegen generate --spec project.yml
+
+      - name: Build (ad-hoc signed)
+        run: |
+          set -eo pipefail
+          xcodebuild \
+            -project ClioK4J.xcodeproj \
+            -scheme ClioK4J \
+            -configuration Release \
+            -sdk iphoneos \
+            -derivedDataPath build/dd \
+            CODE_SIGN_IDENTITY="-" \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGNING_ALLOWED=YES \
+            DEVELOPMENT_TEAM="" \
+            PROVISIONING_PROFILE_SPECIFIER="" \
+            build
+
+      - name: Package IPA
+        run: |
+          set -e
+          APP_PATH="$(find build/dd/Build/Products/Release-iphoneos -maxdepth 2 -name '*.app' | head -n1)"
+          echo "App: $APP_PATH"
+          STAGE="$(mktemp -d)"
+          mkdir -p "$STAGE/Payload"
+          cp -R "$APP_PATH" "$STAGE/Payload/"
+          mkdir -p artifacts
+          (cd "$STAGE" && zip -qr "$GITHUB_WORKSPACE/artifacts/ClioK4J.ipa" Payload)
+          ls -lh artifacts
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ClioK4J-ipa
+          path: artifacts/ClioK4J.ipa
+          if-no-files-found: error
+
+      - name: Attach to release
+        if: github.event_name == 'release'
+        uses: softprops/action-gh-release@v2
+        with:
+          files: artifacts/ClioK4J.ipa
