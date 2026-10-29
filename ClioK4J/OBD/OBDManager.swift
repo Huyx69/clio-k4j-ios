@@ -36,7 +36,7 @@ final class OBDManager: ObservableObject {
     /// Observe les scans et l'état BLE pour mettre à jour l'UI.
     init() {
         ble.$discovered.receive(on: DispatchQueue.main)
-            .sink { [weak self] self?.discovered = $0 }
+            .sink { [weak self] in self?.discovered = $0 }
             .store(in: &cancellables)
         ble.disconnectSubject.receive(on: DispatchQueue.main)
             .sink { [weak self] in self?.handleDisconnect() }
